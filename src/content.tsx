@@ -36,7 +36,7 @@ export type ServiceArt = 'chart' | 'plan' | 'contrast' | 'bars' | 'week' | 'inte
 
 export const services: { title: string; text: string; art: ServiceArt }[] = [
   { art: 'chart', title: 'Produtos para clínicas.', text: 'Plataformas próprias para a rotina de clínicas especializadas em autismo, da agenda à evolução terapêutica, prontas para usar.' },
-  { art: 'plan', title: 'Sistemas sob medida.', text: 'Software desenvolvido para os fluxos específicos da sua clínica, do protótipo à implantação.' },
+  { art: 'plan', title: 'Sistemas sob medida.', text: 'Software concebido para os fluxos próprios da sua clínica, do protótipo à implantação.' },
   { art: 'contrast', title: 'Acessibilidade.', text: 'Interfaces previsíveis e de alto contraste, pensadas para pacientes e famílias, em conformidade com a WCAG.' },
   { art: 'bars', title: 'Dados e indicadores.', text: 'Painéis de adesão, frequência e evolução que apoiam decisões clínicas e de gestão baseadas em evidências.' },
   { art: 'week', title: 'Design de produto.', text: 'Pesquisa com terapeutas e famílias para criar telas calmas, claras e fáceis de usar no dia a dia.' },

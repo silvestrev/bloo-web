@@ -278,7 +278,7 @@ function Hero() {
               <Photo key={photo.alt} photo={photo} />
             ))}
           </div>
-          <span>Desenvolvido com terapeutas, gestores e famílias</span>
+          <span>Concebido ao lado de terapeutas, gestores e famílias</span>
         </div>
       </div>
       <div className={`hero__visual${photos.hero.src ? ' hero__visual--photo' : ''}`}>
@@ -499,7 +499,7 @@ function Products() {
           id="produtos-title"
           eyebrow="Produtos Bloo"
           title="Uma plataforma para toda a clínica."
-          text="Nossos produtos são desenvolvidos em parceria com terapeutas, gestores e famílias de clínicas especializadas em autismo."
+          text="Cada produto nasce da escuta atenta de terapeutas, gestores e famílias de clínicas especializadas em autismo."
         />
         <ul className="product-list">
           {products.map((product) => (
@@ -785,7 +785,7 @@ function Contact() {
         <ul className="contact__list">
           {[
             ['clock', 'Resposta ágil', 'Retorno em até um dia útil.'],
-            ['users', 'Atendimento direto', 'Quem responde é quem vai desenvolver.'],
+            ['users', 'Atendimento direto', 'Quem responde é quem conduz o seu projeto.'],
             ['lock', 'Dados protegidos', 'Usados apenas para responder ao seu contato.'],
           ].map(([icon, title, text]) => (
             <li key={title}>
@@ -852,7 +852,7 @@ function Footer() {
       <div className="footer__grid">
         <div className="footer__brand">
           <Logo />
-          <p>HealthTech que desenvolve tecnologia acessível exclusivamente para clínicas especializadas em autismo.</p>
+          <p>Tecnologia acessível, concebida exclusivamente para clínicas especializadas em autismo.</p>
         </div>
         <nav aria-label="Rodapé" className="footer__col">
           <span>Navegação</span>
