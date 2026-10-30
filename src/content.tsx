@@ -52,9 +52,24 @@ export const products: { id: string; label: string; icon: KazIconName; text: str
 ];
 
 export const steps = [
-  { title: 'Compreender a clínica.', text: 'Ouvimos gestores, terapeutas e famílias e mapeamos o fluxo real de atendimento antes de desenhar qualquer tela.', art: 'hub' as const },
-  { title: 'Construir com clareza.', text: 'Definimos escopo, prazos e equipe e entregamos em ciclos curtos, sempre testados.', art: 'scope' as const },
-  { title: 'Evoluir com evidências.', text: 'Acompanhamos o uso, medimos os resultados e definimos com você as próximas prioridades.', art: 'release' as const },
+  {
+    phase: 'Semanas 1 e 2',
+    title: 'Compreender a clínica.',
+    text: 'Ouvimos gestores, terapeutas e famílias e mapeamos o fluxo real de atendimento antes de desenhar qualquer tela.',
+    deliverables: ['Mapa do fluxo de atendimento', 'Escopo e cronograma por escrito'],
+  },
+  {
+    phase: 'Ciclos de duas semanas',
+    title: 'Construir com clareza.',
+    text: 'Entregamos em ciclos curtos, sempre testados com quem utilizará o sistema no dia a dia.',
+    deliverables: ['Versão testável a cada ciclo', 'Resumo de cada ciclo concluído'],
+  },
+  {
+    phase: 'Acompanhamento contínuo',
+    title: 'Evoluir com evidências.',
+    text: 'Acompanhamos o uso, medimos os resultados e definimos com você as próximas prioridades.',
+    deliverables: ['Indicadores de uso e de resultado', 'Prioridades revisadas em conjunto'],
+  },
 ];
 
 export const roles = [

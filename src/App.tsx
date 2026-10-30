@@ -261,11 +261,14 @@ function Hero() {
   return (
     <section id="inicio" className="section hero" aria-labelledby="hero-title">
       <div className="hero__copy">
-        <Eyebrow>HealthTech especializada em autismo</Eyebrow>
-        <h1 id="hero-title" className="h1">
-          Tecnologia que cuida, <span className="h1__accent">feita para clínicas especializadas em autismo.</span>
+        <p className="hero__badge">
+          <span className="hero__badge-dot" aria-hidden="true" />
+          HealthTech especializada em autismo
+        </p>
+        <h1 id="hero-title" className="h1 hero__title">
+          Tecnologia que cuida <span className="h1__accent">de quem cuida.</span>
         </h1>
-        <p className="lead">Produtos, sistemas sob medida, dados e integrações para a rotina de quem atende pessoas no Transtorno do Espectro Autista.</p>
+        <p className="lead hero__lead">Produtos, sistemas sob medida, dados e integrações concebidos exclusivamente para clínicas especializadas no Transtorno do Espectro Autista.</p>
         <div className="actions">
           <Cta href="#contato" size="lg">
             Agendar uma conversa
@@ -554,64 +557,41 @@ function Products() {
 
 /* -------------------------------------------------------------- Processo */
 
-function StepArt({ art }: { art: (typeof steps)[number]['art'] }) {
-  if (art === 'hub')
-    return (
-      <div className="art art--hub">
-        {['Gestão', 'Terapeutas', 'Famílias', 'Recepção'].map((label) => (
-          <span key={label} className="hub__node">
-            {label}
-          </span>
-        ))}
-        <span className="hub__center">
-          <KazIcon name="compass" />
-        </span>
-      </div>
-    );
-  if (art === 'scope')
-    return (
-      <div className="art art--scope">
-        {[
-          ['Escopo', '3 módulos'],
-          ['Prazo', '10 semanas'],
-          ['Ciclos', 'Quinzenais'],
-        ].map(([label, value]) => (
-          <div key={label} className="scope-row">
-            <span>{label}</span>
-            <b>{value}</b>
-          </div>
-        ))}
-      </div>
-    );
-  return (
-    <div className="art art--release">
-      <div className="release-head">
-        <KazBadge tone="success" dot size="sm">
-          Publicado
-        </KazBadge>
-        <span>v1.4</span>
-      </div>
-      <BarStrip data={[4, 6, 5, 8, 9, 8, 11, 12, 14, 13, 16, 18]} height={60} gap={0.35} rounded={false} />
-    </div>
-  );
-}
-
 function Process() {
   return (
     <section id="processo" className="section section--band" aria-labelledby="processo-title">
       <SectionHead id="processo-title" eyebrow="Como trabalhamos" title="Um processo claro, do início ao fim." text="Você acompanha o que está sendo feito, por que e quando será entregue." center />
-      <ol className="steps">
+      <ol className="timeline">
         {steps.map((step, index) => (
-          <li key={step.title} className="card" data-reveal>
-            <div className="card__art" aria-hidden="true" {...{ inert: '' }}>
-              <StepArt art={step.art} />
+          <li key={step.title} className="timeline__step" data-reveal>
+            <div className="timeline__head">
+              <span className="timeline__node" aria-hidden="true">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <span className="timeline__phase">{step.phase}</span>
             </div>
-            <span className="step-number">{String(index + 1).padStart(2, '0')}</span>
-            <h3 className="card__title">{step.title}</h3>
-            <p className="card__text">{step.text}</p>
+            <h3 className="timeline__title">{step.title}</h3>
+            <p className="timeline__text">{step.text}</p>
+            <div className="timeline__deliver">
+              <p className="timeline__label">O que você recebe</p>
+              <ul>
+                {step.deliverables.map((item) => (
+                  <li key={item}>
+                    <KazIcon name="check" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </li>
         ))}
       </ol>
+      <p className="timeline__note" data-reveal>
+        <KazIcon name="shield" />
+        <span>
+          <strong>Em todas as etapas:</strong> um responsável direto pelo seu projeto, prazos combinados por escrito e visibilidade completa do andamento.
+        </span>
+      </p>
     </section>
   );
 }
