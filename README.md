@@ -51,6 +51,15 @@ Sem essa variável, o site avisa que o envio ainda não está configurado e não
 - Gráficos decorativos: `src/charts.tsx`
 - Layout: `src/site.css` (cores, fontes e espaçamentos vêm dos tokens do Kaz)
 
+## Deploy
+
+O workflow `.github/workflows/deploy.yml` publica o site no **GitHub Pages** a cada merge na `main`, e também pode ser rodado à mão em **Actions**. Para funcionar:
+
+1. Ative **Settings → Pages → Source: GitHub Actions**. Em repositório privado, o Pages exige o plano GitHub Pro.
+2. Opcional: crie a variável `VITE_CONTACT_ENDPOINT` em **Settings → Secrets and variables → Actions → Variables** para ligar o formulário.
+
+O site fica em `https://silvestrev.github.io/bloo-web/`. Para usar um domínio próprio, configure em **Settings → Pages → Custom domain**.
+
 ## CI e segurança
 
 - **CI** (`.github/workflows/ci.yml`): instala e builda a cada PR e push na `main`. O job se chama `check`.
