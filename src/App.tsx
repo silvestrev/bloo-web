@@ -278,7 +278,7 @@ function Hero() {
           HealthTech especializada em autismo
         </p>
         <h1 id="hero-title" className="h1 hero__title">
-          Tecnologia que cuida <span className="h1__accent">de quem cuida.</span>
+          Tecnologia à altura <span className="h1__accent">do cuidado no autismo.</span>
         </h1>
         <p className="lead hero__lead">Produtos, sistemas sob medida, dados e integrações concebidos exclusivamente para clínicas especializadas no Transtorno do Espectro Autista.</p>
         <div className="actions">
