@@ -17,7 +17,6 @@ import {
 import { AreaChart, BarStrip } from './charts';
 import {
   faq,
-  formats,
   integrations,
   kpis,
   momentum,
@@ -127,7 +126,6 @@ export function App() {
           <Products />
           <Process />
           <Roles />
-          <Formats />
           <KazPanel />
           <Faq />
           <Contact />
@@ -283,7 +281,8 @@ function Hero() {
           ))}
         </ul>
       </div>
-      <div className="hero__visual">
+      <div className={`hero__visual${photos.hero.src ? ' hero__visual--photo' : ''}`}>
+        {photos.hero.src && <img className="hero__photo" src={photos.hero.src} alt={photos.hero.alt} />}
         <Dashboard />
         <p className="hero__caption">Conceito de produto · Dados de demonstração</p>
       </div>
@@ -640,43 +639,6 @@ function Roles() {
   );
 }
 
-/* --------------------------------------------------------------- Formatos */
-
-function Formats() {
-  return (
-    <section className="section section--band" aria-labelledby="formatos-title">
-      <SectionHead id="formatos-title" eyebrow="Formatos" title="Escolha como trabalhar conosco." text="Valores sob consulta, com proposta detalhada após a primeira conversa." center />
-      <div className="formats">
-        {formats.map((format) => (
-          <article key={format.name} className={`format${format.recommended ? ' format--featured' : ''}`} data-reveal>
-            <span className="format__tag">{format.tag}</span>
-            <h3>{format.name}</h3>
-            <p className="format__headline">{format.headline}</p>
-            <p className="format__note">{format.note}</p>
-            <p className="format__text">{format.text}</p>
-            <ul>
-              {format.features.map((feature) => (
-                <li key={feature}>
-                  <KazIcon name="check" /> {feature}
-                </li>
-              ))}
-            </ul>
-            {format.recommended ? (
-              <Cta href="#contato" fullWidth>
-                Solicitar proposta
-              </Cta>
-            ) : (
-              <KazButton href="#contato" variant="outline" tone="neutral" fullWidth rightIcon={<KazIcon name="arrow-right" />}>
-                Solicitar proposta
-              </KazButton>
-            )}
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
-
 /* --------------------------------------------------------------------- Kaz */
 
 function KazPanel() {
@@ -727,7 +689,7 @@ function KazPanel() {
 
 function Faq() {
   return (
-    <section id="faq" className="section split split--faq" aria-labelledby="faq-title">
+    <section id="faq" className="section section--band split split--faq" aria-labelledby="faq-title">
       <SectionHead id="faq-title" eyebrow="Dúvidas" title="Perguntas frequentes." text="Não encontrou o que procurava? Envie a sua pergunta pelo formulário abaixo." />
       <KazAccordion variant="flush" items={faq} defaultValue={['quem']} headingLevel={3} className="faq" />
     </section>
@@ -783,7 +745,7 @@ function Contact() {
   };
 
   return (
-    <section id="contato" className="section section--band contact" aria-labelledby="contato-title">
+    <section id="contato" className="section contact" aria-labelledby="contato-title">
       <div className="contact__copy">
         <SectionHead id="contato-title" eyebrow="Contato" title="Vamos conversar sobre a sua clínica?" text="Conte-nos um pouco sobre o seu desafio. A primeira conversa é gratuita e sem compromisso." />
         <ul className="contact__list">

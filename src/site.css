@@ -64,7 +64,6 @@ body { margin: 0; }
 /* Botões e links */
 .site .cta.kaz-btn { background: var(--site-ink); color: var(--site-bg); border-color: var(--site-ink); border-radius: var(--kaz-radius-full); }
 .site .cta.kaz-btn:hover { background: color-mix(in srgb, var(--site-ink) 85%, var(--kaz-primary-solid)); }
-.site .format .kaz-btn--outline { border-radius: var(--kaz-radius-full); }
 .text-link {
   display: inline-flex; align-items: center; gap: .375rem; font-weight: 500; color: var(--site-ink); text-decoration: none;
   border-radius: var(--kaz-radius-sm);
@@ -133,6 +132,10 @@ body { margin: 0; }
     radial-gradient(120% 90% at 100% 0%, var(--kaz-purple-400) 0%, transparent 55%),
     linear-gradient(160deg, var(--kaz-purple-600), var(--kaz-purple-900));
 }
+.hero__visual--photo { overflow: hidden; padding-top: clamp(6rem, 14vw, 9rem); }
+.hero__photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero__visual--photo::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 20%, rgb(38 26 74 / .75)); }
+.hero__visual--photo .dash, .hero__visual--photo .hero__caption { position: relative; }
 .hero__caption { margin-top: .875rem !important; text-align: center; font-size: .75rem; color: rgb(255 255 255 / .8); letter-spacing: .02em; }
 
 /* Painel de demonstração */
@@ -269,25 +272,6 @@ body { margin: 0; }
 .roles__n { flex: none; width: 1.75rem; color: var(--kaz-primary-text); font-weight: 600; font-variant-numeric: tabular-nums; }
 .roles h3 { font-size: 1rem; font-weight: 600; color: var(--site-ink); }
 .roles p { margin-top: .2rem !important; color: var(--kaz-color-text-muted); font-size: .9375rem; }
-
-/* Formatos */
-.formats { display: grid; gap: 1rem; align-items: stretch; }
-@media (min-width: 960px) { .formats { grid-template-columns: repeat(3, 1fr); } }
-.format { display: flex; flex-direction: column; padding: 1.75rem; border-radius: 1.25rem; background: var(--site-card); border: 1px solid var(--site-line); }
-.format--featured { background: var(--site-ink); color: var(--site-bg); border-color: var(--site-ink); }
-.format__tag { align-self: flex-start; font-size: .75rem; font-weight: 600; padding: .25rem .625rem; border-radius: 999px; background: var(--site-panel); color: var(--kaz-color-text-muted); }
-.format--featured .format__tag { background: var(--kaz-primary-solid); color: #fff; }
-.format h3 { margin-top: 1.25rem !important; font-size: 1rem; font-weight: 600; }
-.format__headline { font-size: 2.25rem; font-weight: 500; letter-spacing: -0.04em; margin-top: .25rem !important; }
-.format__note, .format__text { font-size: .875rem; color: var(--kaz-color-text-muted); }
-.format__text { margin: .75rem 0 1.25rem !important; padding-bottom: 1.25rem; border-bottom: 1px solid var(--site-line); }
-.format--featured .format__note, .format--featured .format__text { color: color-mix(in srgb, var(--site-bg) 70%, transparent); }
-.format--featured .format__text { border-color: color-mix(in srgb, var(--site-bg) 18%, transparent); }
-.format ul { display: grid; gap: .625rem; margin-bottom: 1.75rem !important; flex: 1; font-size: .9375rem; }
-.format li { display: flex; gap: .5rem; align-items: center; }
-.format li svg { color: var(--kaz-primary-solid); flex: none; }
-.format--featured li svg { color: var(--kaz-purple-300); }
-.site .format--featured .cta.kaz-btn { background: var(--site-bg); color: var(--site-ink); border-color: var(--site-bg); }
 
 /* Painel do Kaz (sempre escuro) */
 .kaz-panel {

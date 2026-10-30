@@ -58,36 +58,6 @@ export const roles = [
   { title: 'Para a recepção', text: 'Agendamentos, confirmações e remarcações sem retrabalho.' },
 ];
 
-export const formats = [
-  {
-    tag: 'Para começar',
-    name: 'Projeto sob medida',
-    headline: 'Escopo fechado',
-    note: 'Prazo e entregas definidos',
-    text: 'Um desafio específico da clínica, com uma solução bem delimitada.',
-    features: ['Imersão e protótipo navegável', 'Design e desenvolvimento', 'Testes e acessibilidade', 'Implantação e treinamento da equipe', '30 dias de acompanhamento'],
-    recommended: false,
-  },
-  {
-    tag: 'Recomendado para crescer',
-    name: 'Squad dedicado',
-    headline: 'Mensal',
-    note: 'Sem fidelidade longa',
-    text: 'Uma equipe da Bloo dedicada à evolução contínua da tecnologia da sua clínica.',
-    features: ['Produto, design e desenvolvimento', 'Entregas quinzenais', 'Prioridades definidas em conjunto', 'Métricas de uso e de qualidade', 'Design system Kaz incluído'],
-    recommended: true,
-  },
-  {
-    tag: 'Pronto para usar',
-    name: 'Produtos Bloo',
-    headline: 'Por clínica',
-    note: 'Assinatura mensal',
-    text: 'Plataforma completa para clínicas especializadas em autismo, em fase piloto.',
-    features: ['Agenda e sessões', 'Evolução clínica', 'Portal da família', 'Implantação assistida', 'Suporte em português'],
-    recommended: false,
-  },
-];
-
 export const faq = [
   {
     id: 'quem',
@@ -139,6 +109,8 @@ export interface Photo {
 }
 
 export const photos = {
+  /** Opcional: com uma foto, ela ocupa o fundo do destaque do hero e o painel fica por cima. */
+  hero: { src: '', alt: 'Terapeuta acompanhando uma criança em sessão', hint: 'Foto horizontal de uma sessão, com espaço livre à direita' } satisfies Photo,
   roles: { src: '', alt: 'Terapeuta e criança durante uma sessão de terapia', hint: 'Terapeuta em sessão com uma criança, em luz natural' } satisfies Photo,
   founder: { src: '', alt: 'Victor Silvestre, fundador da Bloo', hint: 'Sua foto de rosto' } satisfies Photo,
   partners: [
