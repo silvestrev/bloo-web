@@ -8,11 +8,17 @@ export const nav = [
   { href: '#faq', label: 'Perguntas' },
 ];
 
-export const kpis = [
-  { label: 'Sessões realizadas', value: '1.284', delta: '+12,4%' },
-  { label: 'Presença', value: '94%', delta: '+3,1 p.p.' },
-  { label: 'Faltas evitadas', value: '86', delta: '+18%' },
-  { label: 'Tempo em relatórios', value: '6h', delta: '−41%' },
+export const kpis: { label: string; value: string; delta: string; icon: KazIconName }[] = [
+  { label: 'Sessões', value: '1.284', delta: '+12,4%', icon: 'calendar' },
+  { label: 'Presença', value: '94%', delta: '+3,1 p.p.', icon: 'check-circle' },
+  { label: 'Faltas evitadas', value: '86', delta: '+18%', icon: 'bell' },
+  { label: 'Relatórios', value: '6h', delta: '−41%', icon: 'clock' },
+];
+
+export const upcoming = [
+  { time: '08:00', name: 'Pedro A.', area: 'Fonoaudiologia', status: 'Confirmada' },
+  { time: '09:30', name: 'Lia M.', area: 'Terapia ocupacional', status: 'Em sessão' },
+  { time: '11:00', name: 'Davi R.', area: 'Psicologia', status: 'Lembrete enviado' },
 ];
 
 export const specialties = [

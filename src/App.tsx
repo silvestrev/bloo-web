@@ -30,6 +30,7 @@ import {
   sessionsPrevious,
   specialties,
   steps,
+  upcoming,
   type Photo as PhotoData,
   type ServiceArt,
 } from './content';
@@ -59,7 +60,7 @@ function useActiveSection(ids: string[]) {
         const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
         if (visible[0]) setActive(visible[0].target.id);
       },
-      { rootMargin: '-35% 0px -55% 0px' },
+      { rootMargin: '-20% 0px -70% 0px' },
     );
     ids.forEach((id) => {
       const el = document.getElementById(id);
@@ -294,58 +295,79 @@ function Hero() {
 function Dashboard() {
   return (
     <div className="dash" aria-hidden="true" {...{ inert: '' }}>
-      <div className="dash__top">
-        <span className="dash__brand">
-          <b>bloo</b> / Clínica Raízes
-        </span>
-        <span className="dash__toggle">
-          <span>Semana</span>
-          <span className="is-on">Mês</span>
-        </span>
-      </div>
-      <p className="dash__title">Sua clínica, em perspectiva</p>
-      <div className="dash__kpis">
-        {kpis.map((kpi) => (
-          <div key={kpi.label} className="dash__kpi">
-            <span>{kpi.label}</span>
-            <strong>{kpi.value}</strong>
-            <em>{kpi.delta}</em>
-          </div>
+      <nav className="dash__rail">
+        <span className="dash__logo">b</span>
+        {(['home', 'calendar', 'chart', 'users', 'settings'] as const).map((icon, i) => (
+          <span key={icon} className={`dash__rail-item${i === 0 ? ' is-on' : ''}`}>
+            <KazIcon name={icon} />
+          </span>
         ))}
-      </div>
-      <div className="dash__row">
-        <div className="dash__card dash__chart">
-          <div className="dash__card-head">
-            <span className="dash__tabs">
-              <span className="is-on">Sessões</span>
-              <span>Faltas</span>
-            </span>
-            <span className="dash__legend">
-              <i className="dot dot--solid" /> Este mês <i className="dot dot--dashed" /> Anterior
-            </span>
+      </nav>
+      <div className="dash__main">
+        <div className="dash__top">
+          <div>
+            <span className="dash__brand">Clínica Raízes · Outubro</span>
+            <p className="dash__title">Bom dia, Ana</p>
           </div>
-          <AreaChart current={sessionsCurrent} previous={sessionsPrevious} xLabels={['1 out', '15 out', '30 out']} height={150} smooth />
+          <span className="dash__toggle">
+            <span>Semana</span>
+            <span className="is-on">Mês</span>
+          </span>
         </div>
-        <div className="dash__card dash__spec">
-          <span className="dash__card-label">Por especialidade</span>
-          {specialties.map((item) => (
-            <div key={item.label} className="spec">
-              <div className="spec__row">
-                <span>{item.label}</span>
-                <b>{item.value}</b>
-              </div>
-              <span className="spec__bar">
-                <span style={{ width: `${item.share * 2.2}%` }} />
+        <div className="dash__kpis">
+          {kpis.map((kpi) => (
+            <div key={kpi.label} className="dash__kpi">
+              <span className="dash__kpi-head">
+                <i>
+                  <KazIcon name={kpi.icon} />
+                </i>
+                {kpi.label}
               </span>
+              <strong>{kpi.value}</strong>
+              <em>{kpi.delta}</em>
             </div>
           ))}
         </div>
+        <div className="dash__row">
+          <div className="dash__card dash__chart">
+            <div className="dash__card-head">
+              <div>
+                <span className="dash__card-label">Sessões realizadas</span>
+                <span className="dash__legend">
+                  <i className="dot dot--solid" /> Este mês <i className="dot dot--dashed" /> Mês anterior
+                </span>
+              </div>
+              <span className="dash__trend">+12,4%</span>
+            </div>
+            <AreaChart current={sessionsCurrent} previous={sessionsPrevious} xLabels={['1 out', '15 out', '30 out']} height={300} smooth marker="64 hoje" />
+          </div>
+          <div className="dash__card dash__agenda">
+            <span className="dash__card-label">Próximas sessões</span>
+            {upcoming.map((item) => (
+              <div key={item.time} className="agenda-item">
+                <time>{item.time}</time>
+                <div>
+                  <b>{item.name}</b>
+                  <small>{item.area}</small>
+                </div>
+              </div>
+            ))}
+            <div className="dash__spec">
+              {specialties.map((item) => (
+                <span key={item.label} style={{ flexGrow: item.share }} title={item.label} />
+              ))}
+            </div>
+            <small className="dash__spec-legend">Fono 41% · TO 33% · Psico 26%</small>
+          </div>
+        </div>
       </div>
-      <div className="dash__insight">
-        <KazIcon name="sparkles" />
+      <div className="dash__toast">
+        <span>
+          <KazIcon name="sparkles" />
+        </span>
         <div>
-          <span>Insight Bloo</span>
-          <p>Lembretes por WhatsApp reduziram as faltas de terça em 18% neste mês.</p>
+          <b>Insight Bloo</b>
+          <small>Lembretes por WhatsApp reduziram as faltas de terça em 18%.</small>
         </div>
       </div>
     </div>
