@@ -35,7 +35,7 @@ export const momentum = [8, 10, 12, 15, 17, 18, 18, 17, 15, 13, 12, 11, 11, 12, 
 export type ServiceArt = 'chart' | 'plan' | 'contrast' | 'bars' | 'week' | 'integrations';
 
 export const services: { title: string; text: string; art: ServiceArt }[] = [
-  { art: 'chart', title: 'Produtos para clínicas.', text: 'Plataformas próprias para a rotina de clínicas especializadas em autismo, da agenda à evolução terapêutica, prontas para usar.' },
+  { art: 'chart', title: 'Produtos para clínicas.', text: 'Plataformas próprias para a rotina da clínica, da agenda à evolução terapêutica, prontas para usar.' },
   { art: 'plan', title: 'Sistemas sob medida.', text: 'Software concebido para os fluxos próprios da sua clínica, do protótipo à implantação.' },
   { art: 'contrast', title: 'Acessibilidade.', text: 'Interfaces previsíveis e de alto contraste, pensadas para pacientes e famílias, em conformidade com a WCAG.' },
   { art: 'bars', title: 'Dados e indicadores.', text: 'Painéis de adesão, frequência e evolução que apoiam decisões clínicas e de gestão baseadas em evidências.' },
@@ -129,14 +129,15 @@ export interface Photo {
   hint: string;
 }
 
+export const trust: { icon: KazIconName; label: string }[] = [
+  { icon: 'lock', label: 'Em conformidade com a LGPD' },
+  { icon: 'check-circle', label: 'Acessibilidade WCAG AA' },
+  { icon: 'heart', label: 'Dedicada ao autismo' },
+];
+
 export const photos = {
   /** Opcional: com uma foto, ela ocupa o fundo do destaque do hero e o painel fica por cima. */
   hero: { src: '', alt: 'Terapeuta acompanhando uma criança em sessão', hint: 'Foto horizontal de uma sessão, com espaço livre à direita' } satisfies Photo,
   roles: { src: '', alt: 'Terapeuta e criança durante uma sessão de terapia', hint: 'Terapeuta em sessão com uma criança, em luz natural' } satisfies Photo,
   founder: { src: '', alt: 'Victor Silvestre, fundador da Bloo', hint: 'Sua foto de rosto' } satisfies Photo,
-  partners: [
-    { src: '', alt: 'Terapeuta de clínica parceira', hint: 'Rosto de terapeuta' },
-    { src: '', alt: 'Gestora de clínica parceira', hint: 'Rosto de gestora' },
-    { src: '', alt: 'Mãe de paciente', hint: 'Rosto de familiar' },
-  ] satisfies Photo[],
 };

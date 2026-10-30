@@ -49,7 +49,7 @@ Sem essa variável, o site avisa que o envio ainda não está configurado e não
 - Textos, serviços, produtos, etapas e perguntas: `src/content.tsx`
 - Estrutura das seções: `src/App.tsx`
 - Gráficos decorativos: `src/charts.tsx`
-- Fotos reais (perfis, avatares do hero, contato e, opcionalmente, o fundo do hero): coloque os arquivos em `public/images/` e preencha `src` em `photos`, no fim de `src/content.tsx` (ex.: `'./images/sessao.jpg'`). Enquanto `src` estiver vazio, o site mostra um espaço reservado descrevendo a foto ideal.
+- Fotos reais (perfis, contato e, opcionalmente, o fundo do hero): coloque os arquivos em `public/images/` e preencha `src` em `photos`, no fim de `src/content.tsx` (ex.: `'./images/sessao.jpg'`). Enquanto `src` estiver vazio, o site mostra um espaço reservado descrevendo a foto ideal.
 - Layout: `src/site.css` (cores, fontes e espaçamentos vêm dos tokens do Kaz)
 
 ## Deploy
