@@ -243,7 +243,19 @@ function Eyebrow({ children }: { children: ReactNode }) {
   return <p className="eyebrow">{children}</p>;
 }
 
-function SectionHead({ id, eyebrow, title, text, center }: { id: string; eyebrow: string; title: ReactNode; text?: string; center?: boolean }) {
+function SectionHead({ id, eyebrow, title, text, center, split }: { id: string; eyebrow: string; title: ReactNode; text?: string; center?: boolean; split?: boolean }) {
+  if (split)
+    return (
+      <header className="section-head section-head--split" data-reveal>
+        <div>
+          <Eyebrow>{eyebrow}</Eyebrow>
+          <h2 id={id} className="h2">
+            {title}
+          </h2>
+        </div>
+        {text && <p className="lead">{text}</p>}
+      </header>
+    );
   return (
     <header className={`section-head${center ? ' section-head--center' : ''}`} data-reveal>
       <Eyebrow>{eyebrow}</Eyebrow>
@@ -476,6 +488,7 @@ function Services() {
           </>
         }
         text="Do produto pronto ao sistema sob medida, cuidamos de toda a tecnologia da sua clínica, e atendemos somente clínicas especializadas em autismo."
+        split
       />
       <div className="bento">
         {services.map((service) => (
@@ -524,31 +537,54 @@ function Products() {
           <TextLink href="#contato">Participar da fase piloto</TextLink>
         </div>
       </div>
-      <div className="card card--panel" data-reveal aria-hidden="true" {...{ inert: '' }}>
-        <div className="card__art unified">
-          <span className="art__label">Visão unificada do paciente</span>
-          <strong className="unified__value">
-            12 <span>objetivos no plano</span>
-          </strong>
-          <div className="unified__bars">
-            {[
-              ['Comunicação', 78],
-              ['Autonomia', 64],
-              ['Interação social', 52],
-              ['Regulação', 70],
-            ].map(([label, value]) => (
-              <div key={label} className="spec">
-                <div className="spec__row">
-                  <span>{label}</span>
-                  <b>{value}%</b>
-                </div>
-                <span className="spec__bar">
-                  <span style={{ width: `${value}%` }} />
-                </span>
-              </div>
-            ))}
+      <div className="patient" data-reveal aria-hidden="true" {...{ inert: '' }}>
+        <div className="patient__head">
+          <span className="patient__avatar">PA</span>
+          <div>
+            <strong>Pedro A.</strong>
+            <span>6 anos · Plano terapêutico ativo</span>
           </div>
-          <AreaChart current={[20, 24, 23, 30, 34, 33, 41, 45, 52, 58]} height={80} grid={false} smooth />
+          <KazBadge tone="success" dot size="sm">
+            Em evolução
+          </KazBadge>
+        </div>
+        <ul className="patient__stats">
+          {[
+            ['12', 'objetivos'],
+            ['94%', 'presença'],
+            ['24', 'sessões'],
+          ].map(([value, label]) => (
+            <li key={label}>
+              <b>{value}</b>
+              <span>{label}</span>
+            </li>
+          ))}
+        </ul>
+        <div className="patient__block">
+          <span className="art__label">Objetivos do plano</span>
+          {[
+            ['Comunicação', 78],
+            ['Autonomia', 64],
+            ['Interação social', 52],
+            ['Regulação', 70],
+          ].map(([label, value]) => (
+            <div key={label} className="spec">
+              <div className="spec__row">
+                <span>{label}</span>
+                <b>{value}%</b>
+              </div>
+              <span className="spec__bar">
+                <span style={{ width: `${value}%` }} />
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="patient__block patient__trend">
+          <div className="spec__row">
+            <span className="art__label">Evolução geral · 10 semanas</span>
+            <b className="patient__delta">+38%</b>
+          </div>
+          <AreaChart current={[20, 24, 23, 30, 34, 33, 41, 45, 52, 58]} height={72} grid={false} smooth />
         </div>
       </div>
     </section>
@@ -606,17 +642,17 @@ function Roles() {
       </div>
       <div>
         <SectionHead id="papeis-title" eyebrow="Para cada perfil" title="Perfis diferentes. O mesmo cuidado." />
-        <ol className="roles">
-          {roles.map((role, index) => (
-            <li key={role.title}>
-              <span className="roles__n">{index + 1}</span>
-              <div>
-                <h3>{role.title}</h3>
-                <p>{role.text}</p>
-              </div>
+        <ul className="roles">
+          {roles.map((role) => (
+            <li key={role.title} data-reveal>
+              <span className="icon-chip">
+                <KazIcon name={role.icon} />
+              </span>
+              <h3>{role.title}</h3>
+              <p>{role.text}</p>
             </li>
           ))}
-        </ol>
+        </ul>
         <Cta href="#contato">Conversar sobre a sua clínica</Cta>
       </div>
     </section>
@@ -651,20 +687,30 @@ function KazPanel() {
           </ul>
         </div>
         <div className="kaz-panel__demo" aria-hidden="true" {...{ inert: '' }}>
-          <div className="kaz-demo-row">
-            <KazButton size="sm">Agendar sessão</KazButton>
-            <KazButton size="sm" variant="soft">
-              Ver agenda
-            </KazButton>
-          </div>
-          <div className="kaz-demo-row">
-            <KazBadge tone="success" dot>
+          <div className="kaz-demo__head">
+            <span className="art__label">Próxima sessão</span>
+            <KazBadge tone="success" dot size="sm">
               Confirmada
             </KazBadge>
-            <KazBadge tone="primary">Fono</KazBadge>
-            <KazBadge tone="warning">Aguardando</KazBadge>
           </div>
-          <KazInput label="Paciente" defaultValue="Pedro Almeida" size="sm" />
+          <div className="kaz-demo__who">
+            <span className="patient__avatar">PA</span>
+            <div>
+              <strong>Pedro Almeida</strong>
+              <span>Fonoaudiologia · Hoje, 08:00 · Sala 2</span>
+            </div>
+          </div>
+          <div className="kaz-demo-row">
+            <KazBadge tone="primary">Comunicação</KazBadge>
+            <KazBadge tone="neutral">Rotina visual</KazBadge>
+          </div>
+          <KazInput label="Observação para a família" defaultValue="Trazer o caderno de comunicação." size="sm" />
+          <div className="kaz-demo-row">
+            <KazButton size="sm">Iniciar sessão</KazButton>
+            <KazButton size="sm" variant="soft">
+              Remarcar
+            </KazButton>
+          </div>
         </div>
       </div>
     </section>

@@ -72,11 +72,11 @@ export const steps = [
   },
 ];
 
-export const roles = [
-  { title: 'Para gestores', text: 'Uma visão integrada da operação: agenda, equipe, convênios e financeiro.' },
-  { title: 'Para terapeutas', text: 'Menos tempo com burocracia e mais tempo dedicado aos pacientes.' },
-  { title: 'Para famílias', text: 'Acompanhamento transparente da evolução, com orientações claras.' },
-  { title: 'Para a recepção', text: 'Agendamentos, confirmações e remarcações sem retrabalho.' },
+export const roles: { title: string; icon: KazIconName; text: string }[] = [
+  { title: 'Para gestores', icon: 'chart', text: 'Uma visão integrada da operação: agenda, equipe, convênios e financeiro.' },
+  { title: 'Para terapeutas', icon: 'heart', text: 'Menos tempo com burocracia e mais tempo dedicado aos pacientes.' },
+  { title: 'Para famílias', icon: 'users', text: 'Acompanhamento transparente da evolução, com orientações claras.' },
+  { title: 'Para a recepção', icon: 'calendar', text: 'Agendamentos, confirmações e remarcações sem retrabalho.' },
 ];
 
 export const faq = [
