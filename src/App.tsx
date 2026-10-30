@@ -1,6 +1,5 @@
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import {
-  KazAccordion,
   KazAlert,
   KazBadge,
   KazButton,
@@ -50,23 +49,33 @@ function readTheme(): Theme {
   return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
-/** Seção visível no momento, para marcar o item ativo do menu. */
+/** Seção atual, para marcar o item ativo do menu: a última cuja borda de cima já passou sob o topo fixo. */
 function useActiveSection(ids: string[]) {
   const [active, setActive] = useState(ids[0]);
   useEffect(() => {
-    if (!('IntersectionObserver' in window)) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        if (visible[0]) setActive(visible[0].target.id);
-      },
-      { rootMargin: '-20% 0px -70% 0px' },
-    );
-    ids.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-    return () => observer.disconnect();
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const offset = 120; // altura do topo fixo + folga
+      const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+      let current = ids[0];
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= offset) current = id;
+      }
+      setActive(atBottom ? ids[ids.length - 1] : current);
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      cancelAnimationFrame(frame);
+    };
   }, [ids]);
   return active;
 }
@@ -254,12 +263,9 @@ function Hero() {
       <div className="hero__copy">
         <Eyebrow>HealthTech especializada em autismo</Eyebrow>
         <h1 id="hero-title" className="h1">
-          Tecnologia que cuida.
-          <span className="h1__accent">Feita para clínicas especializadas em autismo.</span>
+          Tecnologia que cuida, <span className="h1__accent">feita para clínicas especializadas em autismo.</span>
         </h1>
-        <p className="lead">
-          A Bloo desenvolve software exclusivamente para clínicas especializadas no Transtorno do Espectro Autista: produtos prontos, sistemas sob medida, dados e integrações, com o cuidado que essa rotina exige.
-        </p>
+        <p className="lead">Produtos, sistemas sob medida, dados e integrações para a rotina de quem atende pessoas no Transtorno do Espectro Autista.</p>
         <div className="actions">
           <Cta href="#contato" size="lg">
             Agendar uma conversa
@@ -274,13 +280,6 @@ function Hero() {
           </div>
           <span>Desenvolvido com terapeutas, gestores e famílias</span>
         </div>
-        <ul className="hero__checks">
-          {['Acessibilidade WCAG', 'Conformidade com a LGPD', 'Foco exclusivo em autismo'].map((item) => (
-            <li key={item}>
-              <KazIcon name="check" /> {item}
-            </li>
-          ))}
-        </ul>
       </div>
       <div className={`hero__visual${photos.hero.src ? ' hero__visual--photo' : ''}`}>
         {photos.hero.src && <img className="hero__photo" src={photos.hero.src} alt={photos.hero.alt} />}
@@ -624,23 +623,6 @@ function Roles() {
     <section className="section split split--reverse" aria-labelledby="papeis-title">
       <div className="roles-visual" data-reveal>
         <Photo photo={photos.roles} />
-        <div className="phone" aria-hidden="true" {...{ inert: '' }}>
-          <div className="phone__notch" />
-          <p className="phone__hello">Olá, família do Pedro</p>
-          <div className="phone__card">
-            <span>Próxima sessão</span>
-            <strong>Quinta, 08:00</strong>
-            <small>Fonoaudiologia · Sala 2</small>
-          </div>
-          <div className="phone__card">
-            <span>Evolução do mês</span>
-            <AreaChart current={[30, 34, 33, 40, 44, 43, 51, 56]} height={64} grid={false} smooth />
-          </div>
-          <div className="phone__card phone__card--accent">
-            <KazIcon name="heart" />
-            <small>Novo registro da terapeuta</small>
-          </div>
-        </div>
       </div>
       <div>
         <SectionHead id="papeis-title" eyebrow="Para cada perfil" title="Perfis diferentes. O mesmo cuidado." />
@@ -709,11 +691,41 @@ function KazPanel() {
   );
 }
 
+/** Perguntas com abertura suave: a altura anima em vez de saltar, sem empurrar a página de uma vez. */
 function Faq() {
+  const [open, setOpen] = useState<string | null>(faq[0].id);
   return (
     <section id="faq" className="section section--band split split--faq" aria-labelledby="faq-title">
       <SectionHead id="faq-title" eyebrow="Dúvidas" title="Perguntas frequentes." text="Não encontrou o que procurava? Envie a sua pergunta pelo formulário abaixo." />
-      <KazAccordion variant="flush" items={faq} defaultValue={['quem']} headingLevel={3} className="faq" />
+      <div className="faq">
+        {faq.map((item) => {
+          const isOpen = open === item.id;
+          return (
+            <div key={item.id} className={`faq__item${isOpen ? ' is-open' : ''}`}>
+              <h3 className="faq__heading">
+                <button
+                  type="button"
+                  id={`faq-${item.id}`}
+                  className="faq__trigger"
+                  aria-expanded={isOpen}
+                  aria-controls={`faq-${item.id}-painel`}
+                  onClick={() => setOpen(isOpen ? null : item.id)}
+                >
+                  {item.title}
+                  <span className="faq__icon" aria-hidden="true">
+                    <KazIcon name="plus" />
+                  </span>
+                </button>
+              </h3>
+              <div id={`faq-${item.id}-painel`} role="region" aria-labelledby={`faq-${item.id}`} className="faq__panel" {...(isOpen ? {} : { inert: '' })}>
+                <div className="faq__content">
+                  <p>{item.content}</p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </section>
   );
 }
