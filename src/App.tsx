@@ -22,6 +22,7 @@ import {
   kpis,
   momentum,
   nav,
+  photos,
   products,
   projectTypes,
   roles,
@@ -29,8 +30,8 @@ import {
   sessionsCurrent,
   sessionsPrevious,
   specialties,
-  stack,
   steps,
+  type Photo as PhotoData,
   type ServiceArt,
 } from './content';
 
@@ -49,9 +50,59 @@ function readTheme(): Theme {
   return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
+/** Seção visível no momento, para marcar o item ativo do menu. */
+function useActiveSection(ids: string[]) {
+  const [active, setActive] = useState(ids[0]);
+  useEffect(() => {
+    if (!('IntersectionObserver' in window)) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]) setActive(visible[0].target.id);
+      },
+      { rootMargin: '-35% 0px -55% 0px' },
+    );
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, [ids]);
+  return active;
+}
+
+/** Entrada suave dos blocos marcados com data-reveal. Sem suporte ou com movimento reduzido, tudo aparece direto. */
+function useReveal() {
+  useEffect(() => {
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || !('IntersectionObserver' in window)) return;
+    const root = document.documentElement;
+    root.classList.add('reveal-on');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        });
+      },
+      { rootMargin: '0px 0px -8% 0px' },
+    );
+    document.querySelectorAll('[data-reveal]').forEach((el) => observer.observe(el));
+    return () => {
+      observer.disconnect();
+      root.classList.remove('reveal-on');
+    };
+  }, []);
+}
+
+const sectionIds = nav.map((item) => item.href.slice(1));
+
 export function App() {
   const [theme, setTheme] = useState<Theme>(readTheme);
   const [menuOpen, setMenuOpen] = useState(false);
+  const active = useActiveSection(sectionIds);
+  useReveal();
 
   useEffect(() => {
     document.documentElement.style.colorScheme = theme;
@@ -68,11 +119,10 @@ export function App() {
       <a href="#conteudo" className="site-skip">
         Pular para o conteúdo
       </a>
-      <Header theme={theme} onToggleTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+      <Header active={active} theme={theme} onToggleTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')} menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
       <div className="frame">
         <main id="conteudo">
           <Hero />
-          <Stack />
           <Services />
           <Products />
           <Process />
@@ -118,7 +168,7 @@ function TextLink({ href, children }: { href: string; children: ReactNode }) {
   );
 }
 
-function Header({ theme, onToggleTheme, menuOpen, setMenuOpen }: { theme: Theme; onToggleTheme: () => void; menuOpen: boolean; setMenuOpen: (open: boolean) => void }) {
+function Header({ active, theme, onToggleTheme, menuOpen, setMenuOpen }: { active: string; theme: Theme; onToggleTheme: () => void; menuOpen: boolean; setMenuOpen: (open: boolean) => void }) {
   const close = () => setMenuOpen(false);
   return (
     <div className="header">
@@ -128,7 +178,7 @@ function Header({ theme, onToggleTheme, menuOpen, setMenuOpen }: { theme: Theme;
         onMenuClick={() => setMenuOpen(!menuOpen)}
         menuLabel={menuOpen ? 'Fechar menu' : 'Abrir menu'}
         nav={nav.map((item) => (
-          <KazTopbarLink key={item.href} href={item.href}>
+          <KazTopbarLink key={item.href} href={item.href} active={item.href === `#${active}`}>
             {item.label}
           </KazTopbarLink>
         ))}
@@ -139,7 +189,7 @@ function Header({ theme, onToggleTheme, menuOpen, setMenuOpen }: { theme: Theme;
             </KazTopbarIconButton>
             <span className="header__cta">
               <Cta href="#contato" size="sm">
-                Fale com a gente
+                Entrar em contato
               </Cta>
             </span>
           </>
@@ -153,10 +203,30 @@ function Header({ theme, onToggleTheme, menuOpen, setMenuOpen }: { theme: Theme;
             </a>
           ))}
           <Cta href="#contato" fullWidth onClick={close}>
-            Fale com a gente
+            Entrar em contato
           </Cta>
         </nav>
       )}
+    </div>
+  );
+}
+
+/** Foto real. Sem `src`, mostra um espaço reservado dizendo que imagem colocar ali. */
+function Photo({ photo, className }: { photo: PhotoData; className?: string }) {
+  if (photo.src) {
+    return (
+      <div className={`photo${className ? ` ${className}` : ''}`}>
+        <img src={photo.src} alt={photo.alt} loading="lazy" decoding="async" />
+      </div>
+    );
+  }
+  return (
+    <div className={`photo photo--empty${className ? ` ${className}` : ''}`} role="img" aria-label={`Espaço para foto: ${photo.alt}`}>
+      <span className="photo__hint" aria-hidden="true">
+        <KazIcon name="user" />
+        <strong>Espaço para foto</strong>
+        <span>{photo.hint}</span>
+      </span>
     </div>
   );
 }
@@ -167,7 +237,7 @@ function Eyebrow({ children }: { children: ReactNode }) {
 
 function SectionHead({ id, eyebrow, title, text, center }: { id: string; eyebrow: string; title: ReactNode; text?: string; center?: boolean }) {
   return (
-    <header className={`section-head${center ? ' section-head--center' : ''}`}>
+    <header className={`section-head${center ? ' section-head--center' : ''}`} data-reveal>
       <Eyebrow>{eyebrow}</Eyebrow>
       <h2 id={id} className="h2">
         {title}
@@ -183,22 +253,30 @@ function Hero() {
   return (
     <section id="inicio" className="section hero" aria-labelledby="hero-title">
       <div className="hero__copy">
-        <Eyebrow>Software house · Tecnologia com cuidado</Eyebrow>
+        <Eyebrow>HealthTech especializada em autismo</Eyebrow>
         <h1 id="hero-title" className="h1">
           Tecnologia que cuida.
-          <span className="h1__accent">Produtos que fazem sentido.</span>
+          <span className="h1__accent">Feita para clínicas especializadas em autismo.</span>
         </h1>
         <p className="lead">
-          A Bloo cria produtos digitais acessíveis e sob medida. Começamos pelas clínicas de TEA, com software que organiza a rotina e aproxima terapeutas e famílias.
+          A Bloo desenvolve software exclusivamente para clínicas especializadas no Transtorno do Espectro Autista: produtos prontos, sistemas sob medida, dados e integrações, com o cuidado que essa rotina exige.
         </p>
         <div className="actions">
           <Cta href="#contato" size="lg">
-            Começar um projeto
+            Agendar uma conversa
           </Cta>
           <TextLink href="#produtos">Conheça os produtos</TextLink>
         </div>
+        <div className="hero__people">
+          <div className="avatars">
+            {photos.partners.map((photo) => (
+              <Photo key={photo.alt} photo={photo} />
+            ))}
+          </div>
+          <span>Desenvolvido com terapeutas, gestores e famílias</span>
+        </div>
         <ul className="hero__checks">
-          {['Acessibilidade WCAG', 'Conforme a LGPD', 'Design system próprio'].map((item) => (
+          {['Acessibilidade WCAG', 'Conformidade com a LGPD', 'Foco exclusivo em autismo'].map((item) => (
             <li key={item}>
               <KazIcon name="check" /> {item}
             </li>
@@ -275,19 +353,6 @@ function Dashboard() {
   );
 }
 
-function Stack() {
-  return (
-    <section className="stack" aria-label="Tecnologias que usamos">
-      <p>Construído com ferramentas maduras</p>
-      <ul>
-        {stack.map((item) => (
-          <li key={item}>{item}</li>
-        ))}
-      </ul>
-    </section>
-  );
-}
-
 /* -------------------------------------------------------------- Serviços */
 
 function ServiceIllustration({ art }: { art: ServiceArt }) {
@@ -296,9 +361,9 @@ function ServiceIllustration({ art }: { art: ServiceArt }) {
       return (
         <div className="art art--chart">
           <div className="art__stat">
-            <span>Clínicas ativas</span>
+            <span>Adesão ao plano</span>
             <strong>
-              24 <em>+6</em>
+              87% <em>+6 p.p.</em>
             </strong>
           </div>
           <AreaChart current={[6, 8, 7, 11, 12, 15, 14, 19, 21, 24]} height={90} grid={false} smooth />
@@ -373,22 +438,25 @@ function ServiceIllustration({ art }: { art: ServiceArt }) {
   }
 }
 
+/** Cards que ocupam duas colunas no desktop, para dar hierarquia ao bento. */
+const wideArts: ServiceArt[] = ['chart', 'bars', 'integrations'];
+
 function Services() {
   return (
-    <section id="servicos" className="section" aria-labelledby="servicos-title">
+    <section id="servicos" className="section section--band" aria-labelledby="servicos-title">
       <SectionHead
         id="servicos-title"
-        eyebrow="O que fazemos"
+        eyebrow="Soluções"
         title={
           <>
-            Do produto pronto <span className="muted">ao feito sob medida.</span>
+            Toda a tecnologia da clínica <span className="muted">em um só parceiro.</span>
           </>
         }
-        text="Uma software house pequena de propósito: poucos projetos, muito cuidado em cada um."
+        text="Do produto pronto ao sistema sob medida, cuidamos de toda a tecnologia da sua clínica, e atendemos somente clínicas especializadas em autismo."
       />
       <div className="bento">
         {services.map((service) => (
-          <article key={service.title} className="card">
+          <article key={service.title} className={`card${wideArts.includes(service.art) ? ' card--wide' : ''}`} data-reveal>
             <div className="card__art" aria-hidden="true" {...{ inert: '' }}>
               <ServiceIllustration art={service.art} />
             </div>
@@ -410,8 +478,8 @@ function Products() {
         <SectionHead
           id="produtos-title"
           eyebrow="Produtos Bloo"
-          title="Feitos para clínicas de TEA."
-          text="Nosso primeiro ecossistema de produtos, criado junto com terapeutas, gestores e famílias."
+          title="Uma plataforma para toda a clínica."
+          text="Nossos produtos são desenvolvidos em parceria com terapeutas, gestores e famílias de clínicas especializadas em autismo."
         />
         <ul className="product-list">
           {products.map((product) => (
@@ -430,10 +498,10 @@ function Products() {
           <KazBadge tone="warning" dot>
             Em desenvolvimento
           </KazBadge>
-          <TextLink href="#contato">Quero participar do piloto</TextLink>
+          <TextLink href="#contato">Participar da fase piloto</TextLink>
         </div>
       </div>
-      <div className="card card--panel" aria-hidden="true" {...{ inert: '' }}>
+      <div className="card card--panel" data-reveal aria-hidden="true" {...{ inert: '' }}>
         <div className="card__art unified">
           <span className="art__label">Visão unificada do paciente</span>
           <strong className="unified__value">
@@ -510,11 +578,11 @@ function StepArt({ art }: { art: (typeof steps)[number]['art'] }) {
 
 function Process() {
   return (
-    <section id="processo" className="section" aria-labelledby="processo-title">
-      <SectionHead id="processo-title" eyebrow="Como trabalhamos" title="Um processo claro, sem surpresas." text="Você sabe o que está sendo feito, por quê e quando chega." center />
+    <section id="processo" className="section section--band" aria-labelledby="processo-title">
+      <SectionHead id="processo-title" eyebrow="Como trabalhamos" title="Um processo claro, do início ao fim." text="Você acompanha o que está sendo feito, por que e quando será entregue." center />
       <ol className="steps">
         {steps.map((step, index) => (
-          <li key={step.title} className="card">
+          <li key={step.title} className="card" data-reveal>
             <div className="card__art" aria-hidden="true" {...{ inert: '' }}>
               <StepArt art={step.art} />
             </div>
@@ -533,8 +601,9 @@ function Process() {
 function Roles() {
   return (
     <section className="section split split--reverse" aria-labelledby="papeis-title">
-      <div className="phone-wrap" aria-hidden="true" {...{ inert: '' }}>
-        <div className="phone">
+      <div className="roles-visual" data-reveal>
+        <Photo photo={photos.roles} />
+        <div className="phone" aria-hidden="true" {...{ inert: '' }}>
           <div className="phone__notch" />
           <p className="phone__hello">Olá, família do Pedro</p>
           <div className="phone__card">
@@ -553,7 +622,7 @@ function Roles() {
         </div>
       </div>
       <div>
-        <SectionHead id="papeis-title" eyebrow="Para quem" title="Papéis diferentes. A mesma direção." />
+        <SectionHead id="papeis-title" eyebrow="Para cada perfil" title="Perfis diferentes. O mesmo cuidado." />
         <ol className="roles">
           {roles.map((role, index) => (
             <li key={role.title}>
@@ -565,7 +634,7 @@ function Roles() {
             </li>
           ))}
         </ol>
-        <Cta href="#contato">Conversar sobre o seu caso</Cta>
+        <Cta href="#contato">Conversar sobre a sua clínica</Cta>
       </div>
     </section>
   );
@@ -575,11 +644,11 @@ function Roles() {
 
 function Formats() {
   return (
-    <section className="section" aria-labelledby="formatos-title">
-      <SectionHead id="formatos-title" eyebrow="Formatos" title="Escolha como trabalhar com a gente." text="Valores sob consulta, com proposta clara depois da primeira conversa." center />
+    <section className="section section--band" aria-labelledby="formatos-title">
+      <SectionHead id="formatos-title" eyebrow="Formatos" title="Escolha como trabalhar conosco." text="Valores sob consulta, com proposta detalhada após a primeira conversa." center />
       <div className="formats">
         {formats.map((format) => (
-          <article key={format.name} className={`format${format.recommended ? ' format--featured' : ''}`}>
+          <article key={format.name} className={`format${format.recommended ? ' format--featured' : ''}`} data-reveal>
             <span className="format__tag">{format.tag}</span>
             <h3>{format.name}</h3>
             <p className="format__headline">{format.headline}</p>
@@ -594,11 +663,11 @@ function Formats() {
             </ul>
             {format.recommended ? (
               <Cta href="#contato" fullWidth>
-                Vamos conversar
+                Solicitar proposta
               </Cta>
             ) : (
               <KazButton href="#contato" variant="outline" tone="neutral" fullWidth rightIcon={<KazIcon name="arrow-right" />}>
-                Vamos conversar
+                Solicitar proposta
               </KazButton>
             )}
           </article>
@@ -613,15 +682,15 @@ function Formats() {
 function KazPanel() {
   return (
     <section className="section" aria-labelledby="kaz-title">
-      <div className="kaz-panel">
+      <div className="kaz-panel" data-reveal>
         <div className="kaz-panel__copy">
           <Eyebrow>Design system próprio</Eyebrow>
           <h2 id="kaz-title" className="h2">
             Consistência em cada tela.
           </h2>
           <p>
-            O Kaz é a biblioteca de componentes da Bloo: mais de 30 peças acessíveis, com tema claro e escuro, que dão a mesma cara e o mesmo cuidado a tudo o que construímos. Este site foi montado com
-            ele.
+            O Kaz é a biblioteca de componentes da Bloo: mais de 30 peças acessíveis, com tema claro e escuro, pensadas para interfaces calmas e previsíveis, essenciais ao público neurodivergente. Este
+            site foi construído com ele.
           </p>
           <ul className="kaz-panel__facts">
             <li>
@@ -659,7 +728,7 @@ function KazPanel() {
 function Faq() {
   return (
     <section id="faq" className="section split split--faq" aria-labelledby="faq-title">
-      <SectionHead id="faq-title" eyebrow="Dúvidas" title="Perguntas frequentes." text="Não achou o que procurava? Escreva para a gente pelo formulário abaixo." />
+      <SectionHead id="faq-title" eyebrow="Dúvidas" title="Perguntas frequentes." text="Não encontrou o que procurava? Envie a sua pergunta pelo formulário abaixo." />
       <KazAccordion variant="flush" items={faq} defaultValue={['quem']} headingLevel={3} className="faq" />
     </section>
   );
@@ -684,11 +753,11 @@ function Contact() {
     const form = event.currentTarget;
     const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
     const next: FormErrors = {};
-    if (!data.name?.trim()) next.name = 'Conte como podemos te chamar.';
-    if (!/^\S+@\S+\.\S+$/.test(data.email ?? '')) next.email = 'Digite um e-mail válido, como nome@empresa.com.br.';
-    if (!data.type) next.type = 'Escolha o assunto.';
-    if ((data.message ?? '').trim().length < 10) next.message = 'Escreva pelo menos 10 caracteres.';
-    if (!data.consent) next.consent = 'Precisamos do seu aceite para responder.';
+    if (!data.name?.trim()) next.name = 'Informe o seu nome.';
+    if (!/^\S+@\S+\.\S+$/.test(data.email ?? '')) next.email = 'Informe um e-mail válido, como nome@clinica.com.br.';
+    if (!data.type) next.type = 'Selecione o assunto.';
+    if ((data.message ?? '').trim().length < 10) next.message = 'A mensagem deve ter pelo menos 10 caracteres.';
+    if (!data.consent) next.consent = 'É necessário o seu consentimento para que possamos responder.';
     setErrors(next);
     if (Object.keys(next).length) {
       form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus();
@@ -714,14 +783,14 @@ function Contact() {
   };
 
   return (
-    <section id="contato" className="section contact" aria-labelledby="contato-title">
+    <section id="contato" className="section section--band contact" aria-labelledby="contato-title">
       <div className="contact__copy">
-        <SectionHead id="contato-title" eyebrow="Contato" title="Vamos conversar?" text="Conte um pouco sobre o seu desafio. A primeira conversa é sem custo e sem compromisso." />
+        <SectionHead id="contato-title" eyebrow="Contato" title="Vamos conversar sobre a sua clínica?" text="Conte-nos um pouco sobre o seu desafio. A primeira conversa é gratuita e sem compromisso." />
         <ul className="contact__list">
           {[
-            ['clock', 'Resposta rápida', 'Em até um dia útil.'],
-            ['users', 'Gente de verdade', 'Quem responde é quem vai construir.'],
-            ['lock', 'Seus dados protegidos', 'Usamos só para responder ao seu contato.'],
+            ['clock', 'Resposta ágil', 'Retorno em até um dia útil.'],
+            ['users', 'Atendimento direto', 'Quem responde é quem vai desenvolver.'],
+            ['lock', 'Dados protegidos', 'Usados apenas para responder ao seu contato.'],
           ].map(([icon, title, text]) => (
             <li key={title}>
               <span className="icon-chip">
@@ -734,16 +803,23 @@ function Contact() {
             </li>
           ))}
         </ul>
+        <div className="founder">
+          <Photo photo={photos.founder} />
+          <div>
+            <strong>Victor Silvestre</strong>
+            <p>Fundador da Bloo. É ele quem lê e responde cada contato.</p>
+          </div>
+        </div>
       </div>
       <form className="contact__form" noValidate onSubmit={onSubmit}>
         {status === 'sent' && (
           <KazAlert tone="success" title="Mensagem enviada!" onClose={() => setStatus('idle')}>
-            Obrigado pelo contato. Respondemos em até um dia útil.
+            Obrigado pelo contato. Responderemos em até um dia útil.
           </KazAlert>
         )}
         {status === 'error' && (
           <KazAlert tone="danger" title="Não foi possível enviar" onClose={() => setStatus('idle')}>
-            Verifique sua conexão e tente de novo.
+            Verifique a sua conexão e tente novamente.
           </KazAlert>
         )}
         {status === 'not-configured' && (
@@ -753,11 +829,11 @@ function Contact() {
         )}
         <div className="contact__row">
           <KazInput name="name" label="Nome" required autoComplete="name" error={errors.name} />
-          <KazInput name="company" label="Empresa ou clínica" autoComplete="organization" />
+          <KazInput name="company" label="Clínica" autoComplete="organization" />
         </div>
-        <KazInput name="email" type="email" label="E-mail" required autoComplete="email" placeholder="nome@empresa.com.br" leftIcon={<KazIcon name="mail" />} error={errors.email} />
+        <KazInput name="email" type="email" label="E-mail" required autoComplete="email" placeholder="nome@clinica.com.br" leftIcon={<KazIcon name="mail" />} error={errors.email} />
         <KazSelect name="type" label="Assunto" required placeholder="Selecione" defaultValue="" options={projectTypes} error={errors.type} />
-        <KazTextarea name="message" label="Mensagem" required rows={5} placeholder="Conte o que você precisa..." error={errors.message} />
+        <KazTextarea name="message" label="Mensagem" required rows={5} placeholder="Descreva brevemente o que você precisa…" error={errors.message} />
         <div>
           <KazCheckbox name="consent" value="sim" label="Aceito que a Bloo use estes dados para responder ao meu contato." />
           {errors.consent && (
@@ -780,7 +856,7 @@ function Footer() {
       <div className="footer__grid">
         <div className="footer__brand">
           <Logo />
-          <p>Software house que cria tecnologia acessível, começando pelo cuidado em saúde.</p>
+          <p>HealthTech que desenvolve tecnologia acessível exclusivamente para clínicas especializadas em autismo.</p>
         </div>
         <nav aria-label="Rodapé" className="footer__col">
           <span>Navegação</span>

@@ -1,6 +1,6 @@
 # bloo-web
 
-Site de apresentação da Bloo, construído com o **Kaz**, o design system da Bloo (`@silvestrev/kaz`).
+Site da Bloo, HealthTech para clínicas especializadas em autismo, construído com o **Kaz**, o design system da Bloo (`@silvestrev/kaz`).
 
 Stack: React 18, TypeScript e Vite. O resultado do build é estático e roda em qualquer hospedagem (Vercel, Netlify, Cloudflare Pages, S3).
 
