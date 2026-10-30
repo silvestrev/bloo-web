@@ -2,12 +2,12 @@
 
 .site {
   /* Base neutra e quente (preto e branco), com o roxo da marca só como acento pontual */
-  --site-bg: #fafaf7;
-  --site-card: #fffffd;
-  --site-panel: #f2f1ed;
-  --site-line: #e6e4de;
+  --site-bg: #fdfdfc;
+  --site-card: #fefefe;
+  --site-panel: #f5f5f4;
+  --site-line: #ebebe9;
   --site-ink: #0e0e10;
-  --site-band: #f1f0eb;
+  --site-band: #f7f7f6;
   --site-accent: var(--kaz-primary-solid);
   --site-shadow: 15 15 20;
   --site-max: 76rem;
@@ -180,9 +180,9 @@ body { margin: 0; }
 
 /* Painel de demonstração */
 .dash {
-  --dash-line: #ebe9e3;
+  --dash-line: #ececea;
   --dash-muted: #5b6270;
-  --dash-surface: #f5f4f0;
+  --dash-surface: #f7f7f6;
   container-type: inline-size;
   position: relative; display: flex; gap: .875rem;
   background: var(--site-card); color: #111827; border-radius: var(--r-lg); padding: .875rem;
@@ -400,7 +400,7 @@ body { margin: 0; }
   display: grid; place-items: center; text-align: center; padding: 1.5rem;
   background:
     repeating-linear-gradient(135deg, transparent 0 14px, color-mix(in srgb, var(--site-ink) 5%, transparent) 14px 15px),
-    linear-gradient(160deg, var(--site-panel), #e9e7e1);
+    linear-gradient(160deg, var(--site-panel), #ececea);
   border: 1.5px dashed color-mix(in srgb, var(--site-ink) 22%, transparent);
   color: var(--kaz-color-text-muted);
 }
