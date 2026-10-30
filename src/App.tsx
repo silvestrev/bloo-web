@@ -29,6 +29,7 @@ import {
   sessionsPrevious,
   specialties,
   steps,
+  trust,
   upcoming,
   type Photo as PhotoData,
   type ServiceArt,
@@ -197,7 +198,7 @@ function Header({ active, theme, onToggleTheme, menuOpen, setMenuOpen }: { activ
             </KazTopbarIconButton>
             <span className="header__cta">
               <Cta href="#contato" size="sm">
-                Entrar em contato
+                Agendar uma conversa
               </Cta>
             </span>
           </>
@@ -211,7 +212,7 @@ function Header({ active, theme, onToggleTheme, menuOpen, setMenuOpen }: { activ
             </a>
           ))}
           <Cta href="#contato" fullWidth onClick={close}>
-            Entrar em contato
+            Agendar uma conversa
           </Cta>
         </nav>
       )}
@@ -280,21 +281,21 @@ function Hero() {
         <h1 id="hero-title" className="h1 hero__title">
           Tecnologia à altura <span className="h1__accent">do cuidado no autismo.</span>
         </h1>
-        <p className="lead hero__lead">Produtos, sistemas sob medida, dados e integrações concebidos exclusivamente para clínicas especializadas no Transtorno do Espectro Autista.</p>
+        <p className="lead hero__lead">Produtos, sistemas sob medida, dados e integrações para a rotina de terapeutas, gestores e famílias.</p>
         <div className="actions">
           <Cta href="#contato" size="lg">
             Agendar uma conversa
           </Cta>
           <TextLink href="#produtos">Conheça os produtos</TextLink>
         </div>
-        <div className="hero__people">
-          <div className="avatars">
-            {photos.partners.map((photo) => (
-              <Photo key={photo.alt} photo={photo} />
-            ))}
-          </div>
-          <span>Concebido ao lado de terapeutas, gestores e famílias</span>
-        </div>
+        <ul className="hero__trust" aria-label="Compromissos da Bloo">
+          {trust.map((item) => (
+            <li key={item.label}>
+              <KazIcon name={item.icon} />
+              {item.label}
+            </li>
+          ))}
+        </ul>
       </div>
       <div className={`hero__visual${photos.hero.src ? ' hero__visual--photo' : ''}`}>
         {photos.hero.src && <img className="hero__photo" src={photos.hero.src} alt={photos.hero.alt} />}
@@ -487,7 +488,7 @@ function Services() {
             Toda a tecnologia da clínica <span className="muted">em um só parceiro.</span>
           </>
         }
-        text="Do produto pronto ao sistema sob medida, cuidamos de toda a tecnologia da sua clínica, e atendemos somente clínicas especializadas em autismo."
+        text="Do produto pronto ao sistema sob medida, com quem conhece de perto a rotina de uma clínica multidisciplinar: agenda, evolução clínica, convênios e famílias."
         split
       />
       <div className="bento">
@@ -515,7 +516,7 @@ function Products() {
           id="produtos-title"
           eyebrow="Produtos Bloo"
           title="Uma plataforma para toda a clínica."
-          text="Cada produto nasce da escuta atenta de terapeutas, gestores e famílias de clínicas especializadas em autismo."
+          text="Cada produto nasce da escuta atenta de terapeutas, gestores e famílias."
         />
         <ul className="product-list">
           {products.map((product) => (
@@ -653,33 +654,33 @@ function Roles() {
             </li>
           ))}
         </ul>
-        <Cta href="#contato">Conversar sobre a sua clínica</Cta>
+        <Cta href="#contato">Agendar uma conversa</Cta>
       </div>
     </section>
   );
 }
 
-/* --------------------------------------------------------------------- Kaz */
+/* -------------------------------------------------------- Acessibilidade */
 
 function KazPanel() {
   return (
-    <section className="section" aria-labelledby="kaz-title">
+    <section className="section" aria-labelledby="acessibilidade-title">
       <div className="kaz-panel" data-reveal>
         <div className="kaz-panel__copy">
-          <Eyebrow>Design system próprio</Eyebrow>
-          <h2 id="kaz-title" className="h2">
-            Consistência em cada tela.
+          <Eyebrow>Acessibilidade</Eyebrow>
+          <h2 id="acessibilidade-title" className="h2">
+            Acessibilidade em cada tela.
           </h2>
           <p>
-            O Kaz é a biblioteca de componentes da Bloo: mais de 30 peças acessíveis, com tema claro e escuro, pensadas para interfaces calmas e previsíveis, essenciais ao público neurodivergente. Este
-            site foi construído com ele.
+            Interfaces calmas, previsíveis e de alto contraste, pensadas para pessoas neurodivergentes, para as famílias e para quem atende. Menos estímulos, linguagem clara e o mesmo padrão em todas as
+            telas.
           </p>
           <ul className="kaz-panel__facts">
             <li>
-              <strong>30+</strong> componentes
+              <strong>WCAG</strong> AA
             </li>
             <li>
-              <strong>WCAG</strong> AA
+              <strong>100%</strong> por teclado
             </li>
             <li>
               <strong>2</strong> temas
@@ -878,7 +879,7 @@ function Footer() {
       <div className="footer__grid">
         <div className="footer__brand">
           <Logo />
-          <p>Tecnologia acessível, concebida exclusivamente para clínicas especializadas em autismo.</p>
+          <p>HealthTech dedicada ao cuidado no autismo.</p>
         </div>
         <nav aria-label="Rodapé" className="footer__col">
           <span>Navegação</span>
