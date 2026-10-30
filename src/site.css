@@ -50,6 +50,7 @@ body { margin: 0; }
 /* Moldura central com réguas verticais, como na referência */
 /* Conteúdo centralizado, sem réguas: as seções se separam por faixas e espaço, não por linhas */
 .frame { max-width: var(--site-max); margin: 0 auto; }
+.site { --site-display: 'Inter Tight', var(--kaz-font-sans); }
 
 /* Tipografia */
 .eyebrow {
@@ -62,7 +63,7 @@ body { margin: 0; }
 }
 .h1__accent { display: block; color: var(--kaz-primary-solid); }
 .site[data-kaz-theme='dark'] .h1__accent { color: var(--kaz-purple-400); }
-.h2 { text-wrap: balance; font-size: clamp(2rem, 4vw, 3.125rem); line-height: 1.05; letter-spacing: -0.045em; font-weight: 550; font-feature-settings: 'ss01', 'cv11'; color: var(--site-ink); }
+.h2 { font-family: var(--site-display); text-wrap: balance; font-size: clamp(2rem, 4vw, 3.125rem); line-height: 1.05; letter-spacing: -0.018em; font-weight: 600; color: var(--site-ink); }
 .muted { color: var(--kaz-color-text-subtle); }
 .lead { text-wrap: pretty; font-size: 1.0625rem; line-height: 1.6; color: var(--kaz-color-text-muted); max-width: 36rem; margin-top: 1.25rem !important; }
 
@@ -131,7 +132,7 @@ body { margin: 0; }
 /* Hero */
 .hero { display: grid; gap: clamp(2.5rem, 5vw, 4rem); padding-top: clamp(3rem, 7vw, 5.5rem); }
 /* Texto centralizado em cima, painel na horizontal embaixo */
-.hero__copy { max-width: 50rem; margin-inline: auto; text-align: center; display: grid; justify-items: center; }
+.hero__copy { max-width: 62rem; margin-inline: auto; text-align: center; display: grid; justify-items: center; }
 .hero__copy .lead { margin-inline: auto; max-width: 38rem; }
 .hero__copy .actions { justify-content: center; }
 .hero__copy .hero__people { justify-content: center; flex-wrap: wrap; }
@@ -152,16 +153,17 @@ body { margin: 0; }
 }
 .hero__badge-dot { width: .5rem; height: .5rem; border-radius: 999px; background: var(--kaz-primary-solid); box-shadow: 0 0 0 3px var(--kaz-primary-soft); }
 .hero__title {
-  font-size: clamp(2.625rem, 6.4vw, 5rem); line-height: 1.02; letter-spacing: -0.05em; font-weight: 550;
-  font-feature-settings: 'ss01', 'cv11';
+  font-family: var(--site-display); font-size: clamp(2.75rem, 6.6vw, 5.375rem); line-height: 1; letter-spacing: -0.022em; font-weight: 600;
 }
 .hero__title .h1__accent {
+  font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-weight: 400; font-size: 1.1em; letter-spacing: -0.02em;
+  padding-right: .06em; /* o itálico não é cortado pelo recorte do degradê */
   background: linear-gradient(100deg, var(--kaz-purple-500), var(--kaz-purple-700));
   -webkit-background-clip: text; background-clip: text; color: transparent; white-space: nowrap;
 }
 @media (min-width: 640px) { .hero__title .h1__accent { display: block; } }
 .site[data-kaz-theme='dark'] .hero__title .h1__accent { background-image: linear-gradient(100deg, var(--kaz-purple-300), var(--kaz-purple-500)); }
-.hero__lead { font-size: clamp(1.0625rem, 1.6vw, 1.1875rem); line-height: 1.6; max-width: 34rem !important; margin-top: 1.5rem !important; }
+.hero__lead { font-size: clamp(1.0625rem, 1.5vw, 1.25rem); line-height: 1.55; letter-spacing: -0.006em; text-wrap: balance; max-width: 38rem !important; margin-top: 1.75rem !important; }
 .hero__copy .actions { margin-top: 2.25rem; gap: 1.5rem; }
 .hero__visual {
   padding-inline: clamp(1rem, 5vw, 4rem) !important; padding-top: clamp(1.5rem, 4vw, 3rem) !important;
