@@ -26,14 +26,16 @@ interface AreaChartProps {
   height?: number;
   smooth?: boolean;
   grid?: boolean;
+  /** Destaca o último ponto com um marcador e este rótulo. */
+  marker?: string;
 }
 
 /** Gráfico de área do período atual com o período anterior tracejado. Decorativo. */
-export function AreaChart({ current, previous, xLabels, yTicks, height = 160, smooth = false, grid = true }: AreaChartProps) {
+export function AreaChart({ current, previous, xLabels, yTicks, height = 160, smooth = false, grid = true, marker }: AreaChartProps) {
   const id = useId();
   const width = 600;
   const left = yTicks ? 28 : 0;
-  const bottom = xLabels ? 20 : 0;
+  const bottom = 0;
   const all = [...current, ...(previous ?? []), ...(yTicks ?? [])];
   const max = Math.max(...all);
   const min = yTicks ? Math.min(...yTicks) : Math.min(...all) * 0.85;
@@ -45,7 +47,8 @@ export function AreaChart({ current, previous, xLabels, yTicks, height = 160, sm
   const line = path(cur);
   const area = `${line} L${cur[cur.length - 1][0]},${6 + plotH} L${cur[0][0]},${6 + plotH} Z`;
 
-  return (
+  const last = cur[cur.length - 1];
+  const svg = (
     <svg viewBox={`0 0 ${width} ${height}`} className="chart" aria-hidden="true" preserveAspectRatio="none">
       <defs>
         <linearGradient id={id} x1="0" x2="0" y1="0" y2="1">
@@ -70,18 +73,28 @@ export function AreaChart({ current, previous, xLabels, yTicks, height = 160, sm
       <path d={area} fill={`url(#${id})`} />
       {previous && <path d={path(toPoints(previous))} className="chart__previous" />}
       <path d={line} className="chart__line" />
-      {xLabels?.map((label, i) => (
-        <text
-          key={label}
-          x={left + (i / (xLabels.length - 1)) * (width - left - 4)}
-          y={height - 4}
-          textAnchor={i === 0 ? 'start' : i === xLabels.length - 1 ? 'end' : 'middle'}
-          className="chart__label"
-        >
-          {label}
-        </text>
-      ))}
     </svg>
+  );
+  if (!marker && !xLabels) return svg;
+  // Marcador e rótulos ficam em HTML para não serem distorcidos pelo preserveAspectRatio="none".
+  return (
+    <div className="chart-wrap">
+      <div className="chart-wrap__plot">
+        {svg}
+        {marker && (
+          <span className="chart__marker" style={{ left: `${(last[0] / width) * 100}%`, top: `${(last[1] / height) * 100}%` }}>
+            <span className="chart__tip">{marker}</span>
+          </span>
+        )}
+      </div>
+      {xLabels && (
+        <div className="chart__x" aria-hidden="true">
+          {xLabels.map((label) => (
+            <span key={label}>{label}</span>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 

@@ -1,6 +1,6 @@
 # bloo-web
 
-Site de apresentação da Bloo, construído com o **Kaz**, o design system da Bloo (`@silvestrev/kaz`).
+Site da Bloo, HealthTech para clínicas especializadas em autismo, construído com o **Kaz**, o design system da Bloo (`@silvestrev/kaz`).
 
 Stack: React 18, TypeScript e Vite. O resultado do build é estático e roda em qualquer hospedagem (Vercel, Netlify, Cloudflare Pages, S3).
 
@@ -49,6 +49,7 @@ Sem essa variável, o site avisa que o envio ainda não está configurado e não
 - Textos, serviços, produtos, etapas e perguntas: `src/content.tsx`
 - Estrutura das seções: `src/App.tsx`
 - Gráficos decorativos: `src/charts.tsx`
+- Fotos reais (perfis, avatares do hero, contato e, opcionalmente, o fundo do hero): coloque os arquivos em `public/images/` e preencha `src` em `photos`, no fim de `src/content.tsx` (ex.: `'./images/sessao.jpg'`). Enquanto `src` estiver vazio, o site mostra um espaço reservado descrevendo a foto ideal.
 - Layout: `src/site.css` (cores, fontes e espaçamentos vêm dos tokens do Kaz)
 
 ## Deploy

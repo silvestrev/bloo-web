@@ -8,13 +8,17 @@ export const nav = [
   { href: '#faq', label: 'Perguntas' },
 ];
 
-export const stack = ['React', 'TypeScript', 'Node.js', 'PostgreSQL', 'React Native', 'AWS', 'Figma', 'Kaz'];
+export const kpis: { label: string; value: string; delta: string; icon: KazIconName }[] = [
+  { label: 'Sessões', value: '1.284', delta: '+12,4%', icon: 'calendar' },
+  { label: 'Presença', value: '94%', delta: '+3,1 p.p.', icon: 'check-circle' },
+  { label: 'Faltas evitadas', value: '86', delta: '+18%', icon: 'bell' },
+  { label: 'Relatórios', value: '6h', delta: '−41%', icon: 'clock' },
+];
 
-export const kpis = [
-  { label: 'Sessões realizadas', value: '1.284', delta: '+12,4%' },
-  { label: 'Presença', value: '94%', delta: '+3,1 p.p.' },
-  { label: 'Faltas evitadas', value: '86', delta: '+18%' },
-  { label: 'Tempo em relatórios', value: '6h', delta: '−41%' },
+export const upcoming = [
+  { time: '08:00', name: 'Pedro A.', area: 'Fonoaudiologia', status: 'Confirmada' },
+  { time: '09:30', name: 'Lia M.', area: 'Terapia ocupacional', status: 'Em sessão' },
+  { time: '11:00', name: 'Davi R.', area: 'Psicologia', status: 'Lembrete enviado' },
 ];
 
 export const specialties = [
@@ -31,103 +35,108 @@ export const momentum = [8, 10, 12, 15, 17, 18, 18, 17, 15, 13, 12, 11, 11, 12, 
 export type ServiceArt = 'chart' | 'plan' | 'contrast' | 'bars' | 'week' | 'integrations';
 
 export const services: { title: string; text: string; art: ServiceArt }[] = [
-  { art: 'chart', title: 'Produtos SaaS.', text: 'Criamos e operamos produtos próprios para nichos que conhecemos a fundo, começando pela saúde.' },
-  { art: 'plan', title: 'Software sob medida.', text: 'Sistemas web e mobile feitos para o fluxo real do seu negócio, do protótipo à produção.' },
-  { art: 'contrast', title: 'Acessibilidade digital.', text: 'Auditoria e correção de produtos para atender WCAG e incluir mais pessoas.' },
-  { art: 'bars', title: 'Dados e painéis.', text: 'Indicadores claros que mostram o que mudou e onde vale agir.' },
-  { art: 'week', title: 'Design de produto.', text: 'Pesquisa, UX e interfaces calmas e previsíveis, construídas sobre o Kaz.' },
-  { art: 'integrations', title: 'Integrações.', text: 'Conectamos o software às ferramentas que a sua operação já usa.' },
+  { art: 'chart', title: 'Produtos para clínicas.', text: 'Plataformas próprias para a rotina de clínicas especializadas em autismo, da agenda à evolução terapêutica, prontas para usar.' },
+  { art: 'plan', title: 'Sistemas sob medida.', text: 'Software concebido para os fluxos próprios da sua clínica, do protótipo à implantação.' },
+  { art: 'contrast', title: 'Acessibilidade.', text: 'Interfaces previsíveis e de alto contraste, pensadas para pacientes e famílias, em conformidade com a WCAG.' },
+  { art: 'bars', title: 'Dados e indicadores.', text: 'Painéis de adesão, frequência e evolução que apoiam decisões clínicas e de gestão baseadas em evidências.' },
+  { art: 'week', title: 'Design de produto.', text: 'Pesquisa com terapeutas e famílias para criar telas calmas, claras e fáceis de usar no dia a dia.' },
+  { art: 'integrations', title: 'Integrações.', text: 'Conexão com as ferramentas que a clínica já utiliza: WhatsApp, agenda, convênios e financeiro.' },
 ];
 
 export const integrations = ['WhatsApp', 'Google Agenda', 'Convênios (TISS)', 'Financeiro'];
 
 export const products: { id: string; label: string; icon: KazIconName; text: string }[] = [
-  { id: 'agenda', label: 'Agenda e sessões', icon: 'calendar', text: 'Terapeutas, salas e pacientes em um só lugar, com lembretes automáticos para as famílias.' },
-  { id: 'evolucao', label: 'Evolução clínica', icon: 'chart', text: 'Registros de sessão que viram gráficos claros de progresso para cada objetivo do plano.' },
-  { id: 'familia', label: 'Portal da família', icon: 'users', text: 'Agenda, combinados e evolução acessíveis para as famílias, no tempo delas.' },
+  { id: 'agenda', label: 'Agenda e sessões', icon: 'calendar', text: 'Terapeutas, salas e pacientes organizados em um só lugar, com lembretes automáticos para as famílias.' },
+  { id: 'evolucao', label: 'Evolução clínica', icon: 'chart', text: 'Registros de sessão convertidos em gráficos claros de progresso para cada objetivo do plano terapêutico.' },
+  { id: 'familia', label: 'Portal da família', icon: 'users', text: 'Agenda, orientações e evolução acessíveis às famílias, no tempo de cada uma.' },
 ];
 
 export const steps = [
-  { title: 'Entender o contexto.', text: 'Conversamos com quem usa e mapeamos o fluxo real antes de desenhar qualquer tela.', art: 'hub' as const },
-  { title: 'Construir com clareza.', text: 'Definimos escopo, prazo e equipe, e entregamos em ciclos curtos e testados.', art: 'scope' as const },
-  { title: 'Evoluir com evidência.', text: 'Acompanhamos o uso, medimos resultados e decidimos juntos o próximo passo.', art: 'release' as const },
+  {
+    phase: 'Semanas 1 e 2',
+    title: 'Compreender a clínica.',
+    text: 'Ouvimos gestores, terapeutas e famílias e mapeamos o fluxo real de atendimento antes de desenhar qualquer tela.',
+    deliverables: ['Mapa do fluxo de atendimento', 'Escopo e cronograma por escrito'],
+  },
+  {
+    phase: 'Ciclos de duas semanas',
+    title: 'Construir com clareza.',
+    text: 'Entregamos em ciclos curtos, sempre testados com quem utilizará o sistema no dia a dia.',
+    deliverables: ['Versão testável a cada ciclo', 'Resumo de cada ciclo concluído'],
+  },
+  {
+    phase: 'Acompanhamento contínuo',
+    title: 'Evoluir com evidências.',
+    text: 'Acompanhamos o uso, medimos os resultados e definimos com você as próximas prioridades.',
+    deliverables: ['Indicadores de uso e de resultado', 'Prioridades revisadas em conjunto'],
+  },
 ];
 
 export const roles = [
-  { title: 'Para clínicas e gestores', text: 'Uma visão compartilhada da operação, da agenda ao financeiro.' },
-  { title: 'Para terapeutas', text: 'Menos tempo com papelada e mais tempo com quem importa.' },
-  { title: 'Para famílias', text: 'Acompanhamento claro, com o contexto certo e sem ruído.' },
-  { title: 'Para empresas de outros setores', text: 'O mesmo cuidado aplicado ao software sob medida do seu negócio.' },
-];
-
-export const formats = [
-  {
-    tag: 'Para começar',
-    name: 'Projeto sob medida',
-    headline: 'Escopo fechado',
-    note: 'Prazo e entregas definidos',
-    text: 'Um problema claro, uma solução bem delimitada.',
-    features: ['Imersão e protótipo navegável', 'Design e desenvolvimento', 'Testes e acessibilidade', 'Publicação e treinamento', '30 dias de acompanhamento'],
-    recommended: false,
-  },
-  {
-    tag: 'Recomendado para crescer',
-    name: 'Squad dedicado',
-    headline: 'Mensal',
-    note: 'Sem fidelidade longa',
-    text: 'Uma equipe da Bloo evoluindo o seu produto continuamente.',
-    features: ['Produto, design e desenvolvimento', 'Entregas a cada duas semanas', 'Prioridades revistas com você', 'Métricas de uso e qualidade', 'Design system Kaz incluído'],
-    recommended: true,
-  },
-  {
-    tag: 'Para clínicas',
-    name: 'Produtos Bloo',
-    headline: 'Por clínica',
-    note: 'Assinatura mensal',
-    text: 'Software pronto para clínicas de TEA, em fase piloto.',
-    features: ['Agenda e sessões', 'Evolução clínica', 'Portal da família', 'Implantação assistida', 'Suporte em português'],
-    recommended: false,
-  },
+  { title: 'Para gestores', text: 'Uma visão integrada da operação: agenda, equipe, convênios e financeiro.' },
+  { title: 'Para terapeutas', text: 'Menos tempo com burocracia e mais tempo dedicado aos pacientes.' },
+  { title: 'Para famílias', text: 'Acompanhamento transparente da evolução, com orientações claras.' },
+  { title: 'Para a recepção', text: 'Agendamentos, confirmações e remarcações sem retrabalho.' },
 ];
 
 export const faq = [
   {
     id: 'quem',
-    title: 'Para quem a Bloo trabalha?',
-    content: 'Para empresas que precisam de software confiável e acessível. Nosso primeiro foco são clínicas multidisciplinares que atendem pessoas no espectro autista, mas também fazemos projetos sob medida para outros setores.',
+    title: 'A Bloo atende outros segmentos?',
+    content: 'Não. A Bloo é uma HealthTech dedicada exclusivamente a clínicas multidisciplinares que atendem pessoas no espectro autista. Esse foco nos permite conhecer a fundo a rotina, os protocolos e as necessidades de cada perfil envolvido.',
+  },
+  {
+    id: 'servicos',
+    title: 'Que tipos de serviço a Bloo oferece?',
+    content: 'Toda a tecnologia de que uma clínica especializada em autismo precisa: produtos prontos, sistemas sob medida, painéis de dados, integrações, design de produto e auditoria de acessibilidade.',
   },
   {
     id: 'produtos',
-    title: 'Os produtos para clínicas já estão disponíveis?',
-    content: 'Estão em desenvolvimento junto com clínicas parceiras. Se quiser participar da fase piloto, deixe seu contato no formulário.',
+    title: 'Os produtos já estão disponíveis?',
+    content: 'Estão em desenvolvimento com clínicas parceiras. Se a sua clínica tiver interesse em participar da fase piloto, entre em contato pelo formulário.',
   },
   {
     id: 'dados',
-    title: 'Como vocês cuidam dos dados de saúde?',
-    content: 'Seguimos a LGPD: criptografia, controle de acesso por perfil, registro de acessos e contratos claros sobre quem é dono dos dados (você).',
+    title: 'Como os dados de saúde são protegidos?',
+    content: 'Seguimos a LGPD com rigor: criptografia, controle de acesso por perfil, registro de acessos e contratos que deixam claro que os dados pertencem à clínica.',
   },
   {
     id: 'valores',
     title: 'Quanto custa um projeto?',
-    content: 'Depende do escopo. Depois de uma primeira conversa sem custo, enviamos uma proposta com escopo, prazos e valores, dividida em etapas.',
+    content: 'Depende do escopo. Após uma primeira conversa, sem custo, enviamos uma proposta com escopo, prazos e valores, organizada em etapas.',
   },
   {
     id: 'codigo',
-    title: 'De quem é o código do meu projeto sob medida?',
-    content: 'Seu. Ao final do projeto você recebe o código, a documentação e os acessos.',
-  },
-  {
-    id: 'kaz',
-    title: 'O que é o Kaz?',
-    content: 'É o design system próprio da Bloo: uma biblioteca de componentes acessíveis e testados que usamos em todos os projetos. Ele acelera as entregas e mantém a qualidade consistente.',
+    title: 'A quem pertence o código de um sistema sob medida?',
+    content: 'À sua clínica. Ao final do projeto, você recebe o código-fonte, a documentação e todos os acessos.',
   },
 ];
 
 export const projectTypes = [
-  { value: 'clinica', label: 'Software para minha clínica' },
-  { value: 'piloto', label: 'Participar do piloto dos produtos Bloo' },
-  { value: 'sob-medida', label: 'Projeto de software sob medida' },
+  { value: 'produtos', label: 'Conhecer os produtos Bloo' },
+  { value: 'piloto', label: 'Participar da fase piloto' },
+  { value: 'sob-medida', label: 'Sistema sob medida para a clínica' },
   { value: 'squad', label: 'Squad dedicado' },
   { value: 'acessibilidade', label: 'Auditoria de acessibilidade' },
   { value: 'outro', label: 'Outro assunto' },
 ];
+
+export interface Photo {
+  /** Caminho da imagem em public/images (ex.: './images/sessao.jpg'). Vazio mostra o espaço reservado. */
+  src: string;
+  alt: string;
+  /** O que a foto deve mostrar. Aparece no espaço reservado enquanto não há imagem. */
+  hint: string;
+}
+
+export const photos = {
+  /** Opcional: com uma foto, ela ocupa o fundo do destaque do hero e o painel fica por cima. */
+  hero: { src: '', alt: 'Terapeuta acompanhando uma criança em sessão', hint: 'Foto horizontal de uma sessão, com espaço livre à direita' } satisfies Photo,
+  roles: { src: '', alt: 'Terapeuta e criança durante uma sessão de terapia', hint: 'Terapeuta em sessão com uma criança, em luz natural' } satisfies Photo,
+  founder: { src: '', alt: 'Victor Silvestre, fundador da Bloo', hint: 'Sua foto de rosto' } satisfies Photo,
+  partners: [
+    { src: '', alt: 'Terapeuta de clínica parceira', hint: 'Rosto de terapeuta' },
+    { src: '', alt: 'Gestora de clínica parceira', hint: 'Rosto de gestora' },
+    { src: '', alt: 'Mãe de paciente', hint: 'Rosto de familiar' },
+  ] satisfies Photo[],
+};
